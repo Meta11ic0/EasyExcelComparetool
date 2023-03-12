@@ -2,11 +2,9 @@ import pandas as pd
 from pathlib import Path
 
 def printdiff(diff):
-    f=open('diff.txt','a',encoding='utf-8')
-    print('result :',file=f)
-    print(diff.keys().tolist(),file=f)
+    f=open('diff.txt','w',encoding='utf-8')
     print(diff.values,file=f)
-    f.close
+    f.close()
 
 def get_row_status(record):
     explain = {'left_only': 'Row_added', 'right_only': 'Row_deleted', 'both': '-'}
@@ -43,9 +41,10 @@ def compare_sheet(new,old,key_column=None):
     df_differences['Changes'] = df_differences.apply(get_row_changes,axis=1,args=(com_cols,old_cols))
     df_differences['Status'] = df_differences.apply(get_row_status, axis=1)
     cols_to_return=[key_column,'Status', 'Changes']
-    
-    return add_cols,del_cols,df_differences[cols_to_return]
-
+    df_return=df_differences[cols_to_return]
+    df_return=df_return[df_return['Status']!='-']
+    return add_cols,del_cols,df_return
+'''
 def compare_exceL(df_old,df_new):
     diff_datas = {}
     add_sheet = []
@@ -63,15 +62,15 @@ def compare_exceL(df_old,df_new):
     for st in old_sts:
         del_sheet.append(st)
     return add_sheet,del_sheet,diff_datas
-
+'''
 if __name__ == '__main__':
     file_path = Path('files')
     filename_new = file_path / 'new.xlsx'
     filename_old = file_path / 'old.xlsx'
-    df_new = pd.read_excel(filename_new,sheet_name=None)
-    df_old = pd.read_excel(filename_old,sheet_name=None)
-    compare_exceL(df_new,df_old)
-    add_sheet,del_sheet,diff=compare_sheet(df_new,df_old,df_new.keys()[0])
+    #取需要对比的sheet从同一个或者不同的两个excel中
+    df_new = pd.read_excel(filename_new,sheet_name=0)
+    df_old = pd.read_excel(filename_old,sheet_name=0)
+    add_sheet,del_sheet,diff=compare_sheet(df_new,df_old,list(df_new.keys())[0])
     printdiff(diff)
 
 
