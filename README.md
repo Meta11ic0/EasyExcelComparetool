@@ -10,3 +10,5 @@
 3. on是指两个表格都需要拥有的一列数据，用于进行合并和比较的标杆列；
 4. suffixes是指当两个表格合并拥有相同名字的列A的时候，给left和right表格上分别加的后缀('_x', '_y')；
 5. indicator为true表示合并后会多出一列'merge'列，默认值是:'left_only','right_only','both'；传字符串则这一列的名字为传入的字符串。
+
+参考:https://github.com/pretoriusdre/similarpanda.git
